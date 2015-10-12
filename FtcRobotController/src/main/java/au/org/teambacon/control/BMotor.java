@@ -2,6 +2,7 @@ package au.org.teambacon.control;
 
 import android.graphics.Path;
 
+import com.ftdi.j2xx.D2xxManager;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
@@ -9,6 +10,8 @@ import au.org.teambacon.wrapper.BRobot;
 
 public class BMotor {
     protected DcMotor Motor;
+
+    protected BMotorController Controller;
 
     protected BMotorType Type;
 
@@ -99,6 +102,14 @@ public class BMotor {
         }
 
         return false;
+    }
+
+    public void setController(BMotorController controller) {
+        this.Controller = controller;
+    }
+
+    public BMotorController getController() {
+        return this.Controller;
     }
 
     public void setTargetPosition(int target) {

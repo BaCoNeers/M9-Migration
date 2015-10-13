@@ -8,12 +8,13 @@ public class AutoOp extends M9 {
 
   @Override
   public void binit() {
+    /*
     Motor = new BMotor(hardwareMap.dcMotor.get("drive_left"));
-    Motor.setType(BMotor.BMotorType.NEVEREST);
+    Motor.setType(BMotor.BMotorType.NEVEREST);*/
   }
 
   @Override
-  public void bloop() {
+  public void bloop() {/*
     telemetry.addData("power:", Double.toString(Motor.getPower()));
     telemetry.addData("target:", Integer.toString(Motor.getTargetPosition()));
     telemetry.addData("rotations:", Double.toString(Motor.getCurrentRotations()));
@@ -34,6 +35,6 @@ public class AutoOp extends M9 {
       case 2:
         Motor.setTargetPosition(2000);
         Motor.setPower(1);
-    }
+    }*/
   }
 }

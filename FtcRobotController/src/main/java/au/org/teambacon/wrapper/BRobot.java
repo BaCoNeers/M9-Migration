@@ -25,10 +25,16 @@ public class BRobot extends OpMode {
 
     protected ElapsedTime Runtime = new ElapsedTime();
 
+    private static boolean Flush = false;
+
     public BRobot() {
         Instance = this;
 
         this.actionHandler = new ActionHandler(this);
+    }
+
+    public static void flush() {
+        Flush = true;
     }
 
     public final void init() {
@@ -39,15 +45,20 @@ public class BRobot extends OpMode {
     public final void loop() {
         this.LoopCount++;
 
+        telemetry.addData("State", Integer.toString(State));
+
         if (this.LoopCount == 1) {
             this.bdefineauto();
             return; // flush everything
         }
 
+        if (Flush) {
+            Flush = false;
+            return;
+        }
+
         if (this.bauto())
             return;
-
-        telemetry.addData("State", Integer.toString(State));
 
         this.bloop();
     }

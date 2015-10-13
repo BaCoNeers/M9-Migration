@@ -1,6 +1,8 @@
 package au.org.teambacon.control;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+
 import au.org.teambacon.wrapper.BRobot;
 
 public class BMotor {
@@ -9,6 +11,8 @@ public class BMotor {
     protected BMotorController Controller;
 
     protected BMotorType Type;
+
+    protected int LegacyTarget = 0;
 
     public BMotor(String name, BMotorController controller, BMotorType type, DcMotor.Direction direction) {
         this.Motor = BRobot.Instance.hardwareMap.dcMotor.get(name);
@@ -30,14 +34,37 @@ public class BMotor {
     }
 
     public int getPosition() {
+        if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
         return this.Motor.getCurrentPosition();
     }
 
+    public void setMode(DcMotorController.RunMode mode) {
+        if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+
+        this.Motor.setChannelMode(mode);
+    }
+
+    public DcMotorController.RunMode getMode() {
+        if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
+        return this.Motor.getChannelMode();
+    }
+
     public void setPower(double power) {
-        this.setPower(power);
+        if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+
+        this.Motor.setPower(power);
     }
 
     public double getPower() {
+        if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
         return this.Motor.getPower();
     }
 
@@ -50,10 +77,18 @@ public class BMotor {
     }
 
     public void setTarget(int target) {
+        if (this.Type.isLegacy()) {
+            this.LegacyTarget = target;
+            return;
+        }
+
         this.Motor.setTargetPosition(target);
     }
 
     public int getTarget() {
+        if (this.Type.isLegacy())
+            return this.LegacyTarget;
+
         return this.Motor.getTargetPosition();
     }
 

@@ -1,5 +1,9 @@
 package au.org.teambacon.actions;
 
+import com.qualcomm.robotcore.hardware.DcMotorController;
+
+import au.org.teambacon.wrapper.BRobot;
+
 public class DriveAction extends Action {
     protected double PowerLeft;
     protected double PowerRight;
@@ -10,7 +14,8 @@ public class DriveAction extends Action {
     protected boolean ProgressRight = false;
 
     public DriveAction(double power, int ticks) {
-        super.register(this);
+        if (DriveLeft.getType().hasEncoder() && DriveRight.getType().hasEncoder())
+            super.register(this);
 
         this.PowerLeft = power;
         this.PowerRight = power;
@@ -19,7 +24,8 @@ public class DriveAction extends Action {
     }
 
     public DriveAction(double powerLeft, double powerRight, int ticksLeft, int ticksRight) {
-        super.register(this);
+        if (DriveLeft.getType().hasEncoder() && DriveRight.getType().hasEncoder())
+            super.register(this);
 
         this.PowerLeft = powerLeft;
         this.PowerRight = powerRight;
@@ -30,18 +36,40 @@ public class DriveAction extends Action {
     public void init() {
         DriveLeft.setTarget(this.TicksLeft);
         DriveRight.setTarget(this.TicksRight);
+
+        DriveLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
     public void start() {
         DriveLeft.setPower(this.PowerLeft);
         DriveRight.setPower(this.PowerRight);
+
+        DriveLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
 
     public boolean loop() {
-        return true;
+        BRobot.Instance.telemetry.addData("position", DriveLeft.getPosition());
+        BRobot.Instance.telemetry.addData("lpower", DriveLeft.getPower());
+        BRobot.Instance.telemetry.addData("ltarget", DriveLeft.getTarget());
+
+        if (DriveRight.getMode() != DcMotorController.RunMode.RUN_USING_ENCODERS)
+            DriveLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+
+        if (DriveRight.getMode() != DcMotorController.RunMode.RUN_USING_ENCODERS)
+            DriveRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+
+        if (DriveLeft.getTarget() >= 0) {
+            if (DriveLeft.getPosition() >= DriveLeft.getTarget())
+                return true;
+        } else {
+            if (DriveLeft.getPosition() <= DriveLeft.getTarget())
+                return true;
+        }
+
+        return false;
     }
 
     public void end() {
-
+        DriveLeft.setPower(0);
     }
 }

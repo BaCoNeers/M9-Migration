@@ -17,33 +17,27 @@ public class ActionHandler {
 
     public void handle() {
         BRobot.Instance.telemetry.addData("Size", this.ActionList.size());
-        BRobot.Instance.telemetry.addData("step", this.Step);
+        BRobot.Instance.telemetry.addData("Step", this.Step);
         switch (this.Step) {
             case 0:
                 this.ActionList.get(0).init();
-                BRobot.Instance.telemetry.addData("Case", 0);
                 this.Step++;
                 break;
             case 1:
                 this.ActionList.get(0).start();
-                BRobot.Instance.telemetry.addData("Case", 1);
                 this.Step++;
                 break;
             case 2:
-                BRobot.Instance.telemetry.addData("Case", 2);
                 if (this.ActionList.get(0).loop())
                     this.Step++;
                 break;
             case 3:
-                BRobot.Instance.telemetry.addData("Case", 3);
                 this.ActionList.get(0).end();
                 this.Step++;
                 break;
             case 4:
-                BRobot.Instance.telemetry.addData("Case", 4);
                 this.ActionList.remove(0);
                 this.Step = 0;
-                BRobot.flush(); // clear everything
                 break;
         }
     }

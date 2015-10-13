@@ -1,7 +1,7 @@
 package au.org.teambacon.robot.m9;
 
 import au.org.teambacon.actions.DriveAction;
-import au.org.teambacon.utils.Rotations;
+import au.org.teambacon.utils.Calculate;
 
 public class Autonomous extends M9 {
     @Override
@@ -11,8 +11,8 @@ public class Autonomous extends M9 {
 
     @Override
     public void bdefineauto() { // define autonomous steps
-        new DriveAction(1, Rotations.convertToTicks(1));
-        new DriveAction(0.5, Rotations.convertToTicks(2));
+        new DriveAction(1, Calculate.rotationsToTicks(1));
+        new DriveAction(0.5, Calculate.rotationsToTicks(2));
     }
 
     @Override

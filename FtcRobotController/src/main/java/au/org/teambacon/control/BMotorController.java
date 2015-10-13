@@ -2,18 +2,13 @@ package au.org.teambacon.control;
 
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
+import au.org.teambacon.wrapper.BRobot;
+
 public class BMotorController {
     protected DcMotorController MotorController;
 
-    protected BMotor Motor1;
-
-    protected BMotor Motor2;
-
-    public BMotorController(DcMotorController motorcontroller, BMotor motor1, BMotor motor2) {
-        this.MotorController = motorcontroller;
-
-        this.Motor1 = motor1;
-        this.Motor2 = motor2;
+    public BMotorController(String motorController) {
+        this.MotorController = BRobot.Instance.hardwareMap.dcMotorController.get(motorController);
     }
 
     public DcMotorController getMotorController() {
@@ -21,8 +16,8 @@ public class BMotorController {
     }
 
     public void setPower(double power) {
-        this.Motor1.setPower(power);
-        this.Motor2.setPower(power);
+        this.MotorController.setMotorPower(1, power);
+        this.MotorController.setMotorPower(2, power);
     }
 
     public void setDeviceMode(DcMotorController.DeviceMode deviceMode) {

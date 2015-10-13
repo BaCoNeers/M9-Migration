@@ -13,22 +13,17 @@ import au.org.teambacon.control.BMotorController;
 public class BRobot extends OpMode {
     public static BMotor DriveLeft;
     public static BMotor DriveRight;
-
     public static BMotorController DriveController;
 
     public static BRobot Instance;
 
     public static ActionHandler actionHandler;
 
-    public static ArrayList<BMotor> Motors = new ArrayList<BMotor>();
-
     protected int LoopCount = 0;
 
     protected int State = 0;
 
     protected ElapsedTime Runtime = new ElapsedTime();
-
-    protected static boolean Flush = false;
 
     public BRobot() {
         Instance = this;
@@ -44,11 +39,6 @@ public class BRobot extends OpMode {
     public final void loop() {
         this.LoopCount++;
 
-        if (this.Flush) {
-            this.Flush = false;
-            return;
-        }
-
         if (this.LoopCount == 1) {
             this.bdefineauto();
             return; // flush everything
@@ -60,10 +50,6 @@ public class BRobot extends OpMode {
         telemetry.addData("State", Integer.toString(State));
 
         this.bloop();
-    }
-
-    public static void flush() {
-        Flush = true;
     }
 
     public void bdefine() {

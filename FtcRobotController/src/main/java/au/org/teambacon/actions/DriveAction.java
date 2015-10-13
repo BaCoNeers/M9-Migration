@@ -38,6 +38,7 @@ public class DriveAction extends Action {
         DriveRight.setTarget(this.TicksRight);
 
         DriveLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        DriveRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
 
     public void start() {
@@ -45,19 +46,11 @@ public class DriveAction extends Action {
         DriveRight.setPower(this.PowerRight);
 
         DriveLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+
+        DriveRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
     }
 
     public boolean loop() {
-        BRobot.Instance.telemetry.addData("position", DriveLeft.getPosition());
-        BRobot.Instance.telemetry.addData("lpower", DriveLeft.getPower());
-        BRobot.Instance.telemetry.addData("ltarget", DriveLeft.getTarget());
-
-        if (DriveRight.getMode() != DcMotorController.RunMode.RUN_USING_ENCODERS)
-            DriveLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
-        if (DriveRight.getMode() != DcMotorController.RunMode.RUN_USING_ENCODERS)
-            DriveRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
         if (DriveLeft.getTarget() >= 0) {
             if (DriveLeft.getPosition() >= DriveLeft.getTarget())
                 return true;

@@ -16,8 +16,8 @@ public class Autonomous extends M9 {
 
     @Override
     public void bdefineauto() { // define autonomous steps
-        new DriveAction(1, 1440);
-        new DriveAction(0.5, Calculate.rotationsToTicks(2));
+        new DriveAction(0.3, 1440);
+        //new DriveAction(0.5, Calculate.rotationsToTicks(2));
     }
 
     @Override

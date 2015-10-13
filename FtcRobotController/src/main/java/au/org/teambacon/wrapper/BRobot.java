@@ -1,5 +1,6 @@
 package au.org.teambacon.wrapper;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -10,7 +11,7 @@ import au.org.teambacon.actions.ActionHandler;
 import au.org.teambacon.control.BMotor;
 import au.org.teambacon.control.BMotorController;
 
-public class BRobot extends OpMode {
+public class BRobot extends LinearOpMode {
     public static BMotor DriveLeft;
     public static BMotor DriveRight;
     public static BMotorController DriveController;
@@ -37,12 +38,21 @@ public class BRobot extends OpMode {
         Flush = true;
     }
 
-    public final void init() {
+    public final void runOpMode() throws InterruptedException {
+        linit();
+
+        waitForStart();
+
+        while (true)
+            lloop();
+    }
+
+    public final void linit() {
         this.Runtime.reset();
         this.binit();
     }
 
-    public final void loop() {
+    public final void lloop() {
         this.LoopCount++;
 
         telemetry.addData("State", Integer.toString(State));

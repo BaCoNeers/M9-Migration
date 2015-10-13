@@ -34,36 +34,31 @@ public class BMotor {
     }
 
     public int getPosition() {
-        if (this.Type.isLegacy())
-            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
 
         return this.Motor.getCurrentPosition();
     }
 
     public void setMode(DcMotorController.RunMode mode) {
-        if (this.Type.isLegacy())
-            this.Controller.setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        this.makeSafe(DcMotorController.DeviceMode.WRITE_ONLY);
 
-        this.Motor.setChannelMode(mode);
+        this.makeSafe(mode);
     }
 
     public DcMotorController.RunMode getMode() {
-        if (this.Type.isLegacy())
-            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
 
         return this.Motor.getChannelMode();
     }
 
     public void setPower(double power) {
-        if (this.Type.isLegacy())
-            this.Controller.setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        this.makeSafe(DcMotorController.DeviceMode.WRITE_ONLY);
 
         this.Motor.setPower(power);
     }
 
     public double getPower() {
-        if (this.Type.isLegacy())
-            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
 
         return this.Motor.getPower();
     }
@@ -122,5 +117,27 @@ public class BMotor {
         public boolean isLegacy() {
             return Legacy;
         }
+    }
+
+    private void makeSafe(DcMotorController.RunMode mode) {
+        if (!this.Type.hasEncoder())
+            return;
+
+        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
+        while (this.Motor.getChannelMode() != mode) {
+            this.makeSafe(DcMotorController.DeviceMode.WRITE_ONLY);
+
+            this.Motor.setChannelMode(mode);
+
+            this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
+        }
+    }
+
+    private void makeSafe(DcMotorController.DeviceMode mode) {
+        if (!this.getType().isLegacy())
+            return;
+
+        while (this.Controller.getDeviceMode() != mode)
+            this.Controller.setDeviceMode(mode);
     }
 }

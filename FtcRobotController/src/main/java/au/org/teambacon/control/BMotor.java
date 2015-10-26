@@ -13,6 +13,7 @@ public class BMotor {
     protected BMotorType Type;
 
     protected int LegacyTarget = 0;
+    protected double LegacyMotorPower = 0;
 
     public BMotor(String name, BMotorController controller, BMotorType type, DcMotor.Direction direction) {
         this.Motor = BRobot.Instance.hardwareMap.dcMotor.get(name);
@@ -34,31 +35,36 @@ public class BMotor {
     }
 
     public int getPosition() {
-        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
+        /*if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);*/
 
         return this.Motor.getCurrentPosition();
     }
 
     public void setMode(DcMotorController.RunMode mode) {
-        this.makeSafe(DcMotorController.DeviceMode.WRITE_ONLY);
+        /*if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);*/
 
-        this.makeSafe(mode);
+        this.Motor.setChannelMode(mode);
     }
 
     public DcMotorController.RunMode getMode() {
-        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
+        /*if (this.Type.isLegacy())
+            this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);*/
 
         return this.Motor.getChannelMode();
     }
 
     public void setPower(double power) {
-        this.makeSafe(DcMotorController.DeviceMode.WRITE_ONLY);
+        if (this.Type.isLegacy())
+            this.LegacyMotorPower = power;
 
         this.Motor.setPower(power);
     }
 
     public double getPower() {
-        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
+        if (this.Type.isLegacy())
+            return this.LegacyMotorPower;
 
         return this.Motor.getPower();
     }
@@ -88,8 +94,8 @@ public class BMotor {
     }
 
     public enum BMotorType {
-        NEVEREST (0, false),
-        TETRIX (0, false),
+        MOTOR (0, false),
+        LEGACY (0, true),
         NEVEREST_ENCODER (1120, false),
         TETRIX_ENCODER (1440, false),
         NEVEREST_ENCODER_LEGACY (1120, true),
@@ -117,27 +123,5 @@ public class BMotor {
         public boolean isLegacy() {
             return Legacy;
         }
-    }
-
-    private void makeSafe(DcMotorController.RunMode mode) {
-        if (!this.Type.hasEncoder())
-            return;
-
-        this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
-        while (this.Motor.getChannelMode() != mode) {
-            this.makeSafe(DcMotorController.DeviceMode.WRITE_ONLY);
-
-            this.Motor.setChannelMode(mode);
-
-            this.makeSafe(DcMotorController.DeviceMode.READ_ONLY);
-        }
-    }
-
-    private void makeSafe(DcMotorController.DeviceMode mode) {
-        if (!this.getType().isLegacy())
-            return;
-
-        while (this.Controller.getDeviceMode() != mode)
-            this.Controller.setDeviceMode(mode);
     }
 }

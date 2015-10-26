@@ -21,9 +21,9 @@ public class BMotorController {
     }
 
     public void setDeviceMode(DcMotorController.DeviceMode deviceMode) {
-        BRobot.flush();
-
         this.MotorController.setMotorControllerDeviceMode(deviceMode);
+
+        BRobot.flush();
     }
 
     public DcMotorController.DeviceMode getDeviceMode() {

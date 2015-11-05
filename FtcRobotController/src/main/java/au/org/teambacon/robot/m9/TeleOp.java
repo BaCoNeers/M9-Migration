@@ -1,9 +1,12 @@
 package au.org.teambacon.robot.m9;
 
 import com.qualcomm.robotcore.hardware.DcMotorController;
+<<<<<<< HEAD
 import com.qualcomm.robotcore.util.Range;
 
 import au.org.teambacon.wrapper.BRobot;
+=======
+>>>>>>> origin/master
 
 public class TeleOp extends M9 {
     @Override
@@ -20,11 +23,17 @@ public class TeleOp extends M9 {
     @Override
     public void bloop() {
         if (gamepad1.a) {
+<<<<<<< HEAD
             // harvester
         }
 
         if (gamepad1.b || gamepad2.b) {
             super.getServo("bucket").setPosition(((super.getServo("bucket").getPosition() == 0.04) ? 0.47 : 0.04));
+=======
+        }
+
+        if (gamepad1.b) {
+>>>>>>> origin/master
         }
 
         if (gamepad1.y) {
@@ -36,6 +45,7 @@ public class TeleOp extends M9 {
                 super.getMotor("screwlift").setPower(1);
             }
         }
+<<<<<<< HEAD
 
         if (gamepad1.x) {
             super.getServo("goalattach").setPosition(((super.getServo("goalattach").getPosition() == 0.9) ? 0.24 : 0.9));
@@ -68,5 +78,10 @@ public class TeleOp extends M9 {
         super.getMotor("lift1").setPower(gamepad2.left_stick_y);
         super.getMotor("lift2").setPower(gamepad2.left_stick_y);
         super.getMotor("lift3").setPower(gamepad2.left_stick_y);
+=======
+
+        if (gamepad1.x) {
+        }
+>>>>>>> origin/master
     }
 }

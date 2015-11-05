@@ -1,6 +1,10 @@
 package au.org.teambacon.wrapper;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+<<<<<<< HEAD
+=======
+import com.qualcomm.robotcore.hardware.Servo;
+>>>>>>> origin/master
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import java.util.HashMap;
@@ -27,7 +31,11 @@ public abstract class BRobot extends OpMode {
     private static boolean Flush = false;
 
     protected Map<String, BMotor> Motors = new HashMap<String, BMotor>();
+<<<<<<< HEAD
     protected Map<String, BServo> Servos = new HashMap<String, BServo>();
+=======
+    protected Map<String, Servo> Servos = new HashMap<String, Servo>();
+>>>>>>> origin/master
 
     public BRobot() {
         Instance = this;
@@ -35,6 +43,7 @@ public abstract class BRobot extends OpMode {
         this.actionHandler = new ActionHandler(this);
     }
 
+<<<<<<< HEAD
     public void addMotor(BMotor motor, String name) {
         this.Motors.put(name, motor);
     }
@@ -46,6 +55,19 @@ public abstract class BRobot extends OpMode {
     }
     public BServo getServo(String name) {
         return this.Servos.get(name);
+=======
+    public void addMotor(BMotor motor) {
+        this.Motors.put(motor.getMotor().getDeviceName(), motor);
+    }
+    public BMotor getMotor(String name) {
+        return this.Motors.get("motor_" + name);
+    }
+    public void addServo(Servo servo) {
+        this.Servos.put(servo.getDeviceName(), servo);
+    }
+    public Servo getServo(String name) {
+        return this.Servos.get("servo_" + name);
+>>>>>>> origin/master
     }
 
     public static void flush() {

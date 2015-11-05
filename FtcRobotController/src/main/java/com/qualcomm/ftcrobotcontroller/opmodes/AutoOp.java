@@ -3,7 +3,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import au.org.teambacon.control.BMotor;
 import au.org.teambacon.robot.m9.M9;
 
-public class AutoOp extends M9 {
+public abstract class AutoOp extends M9 {
   BMotor Motor;
 
   @Override

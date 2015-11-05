@@ -6,12 +6,9 @@ import au.org.teambacon.actions.DriveAction;
 import au.org.teambacon.utils.Calculate;
 
 public class Autonomous extends M9 {
-    //public OpticalDistanceSensor distance = hardwareMap.opticalDistanceSensor.get("distance");
-
     @Override
     public void binit() {
-        super.bdefine(); // define controls
-
+        super.bdefine();
     }
 
     @Override
@@ -22,6 +19,5 @@ public class Autonomous extends M9 {
 
     @Override
     public void bloop() {
-        //telemetry.addData("distance", distance.getLightDetected());
     }
 }

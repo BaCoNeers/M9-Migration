@@ -2,20 +2,17 @@ package au.org.teambacon.actions;
 
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
-import au.org.teambacon.wrapper.BRobot;
-
 public class DriveAction extends Action {
     protected double PowerLeft;
     protected double PowerRight;
     protected int TicksLeft;
     protected int TicksRight;
 
-    protected boolean ProgressLeft = false;
-    protected boolean ProgressRight = false;
-
     public DriveAction(double power, int ticks) {
-        if (DriveLeft.getType().hasEncoder() && DriveRight.getType().hasEncoder())
-            super.register(this);
+        if (!DriveLeft.getType().hasEncoder() && !DriveRight.getType().hasEncoder())
+            return;
+
+        super.register(this);
 
         this.PowerLeft = power;
         this.PowerRight = power;
@@ -24,8 +21,10 @@ public class DriveAction extends Action {
     }
 
     public DriveAction(double powerLeft, double powerRight, int ticksLeft, int ticksRight) {
-        if (DriveLeft.getType().hasEncoder() && DriveRight.getType().hasEncoder())
-            super.register(this);
+        if (!DriveLeft.getType().hasEncoder() && !DriveRight.getType().hasEncoder())
+            return;
+
+        super.register(this);
 
         this.PowerLeft = powerLeft;
         this.PowerRight = powerRight;
@@ -34,35 +33,47 @@ public class DriveAction extends Action {
     }
 
     public void init() {
-        DriveLeft.setTarget(this.TicksLeft);
-        DriveRight.setTarget(this.TicksRight);
+        DriveLeft.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out
+        DriveRight.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out
 
-        DriveLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
-        DriveRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+        DriveLeft.setTarget(this.TicksLeft); // no
+        DriveRight.setTarget(this.TicksRight); // no
+
+        DriveLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS); // write
+        DriveRight.setMode(DcMotorController.RunMode.RESET_ENCODERS); // write
     }
 
     public void start() {
-        DriveLeft.setPower(this.PowerLeft);
-        DriveRight.setPower(this.PowerRight);
+        DriveLeft.setPower(this.PowerLeft); // write
+        DriveRight.setPower(this.PowerRight); // write
 
-        DriveLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-
-        DriveRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        DriveLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS); // write
+        DriveRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS); // write
     }
 
     public boolean loop() {
-        if (DriveLeft.getTarget() >= 0) {
-            if (DriveLeft.getPosition() >= DriveLeft.getTarget())
+        if (DriveLeft.getTarget() >= 0) { // no
+            if (DriveLeft.getPosition() >= DriveLeft.getTarget() && DriveRight.getPosition() >= DriveRight.getPosition()) { // read
+                DriveLeft.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out end()
+                DriveRight.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out end()
                 return true;
+            }
         } else {
-            if (DriveLeft.getPosition() <= DriveLeft.getTarget())
+            if (DriveLeft.getPosition() <= DriveLeft.getTarget() && DriveRight.getPosition() <= DriveRight.getPosition()) { // read
+                DriveLeft.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out end()
+                DriveRight.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out end()
                 return true;
+            }
         }
 
         return false;
     }
 
     public void end() {
-        DriveLeft.setPower(0);
+        // stop motors
+
+        DriveLeft.setPower(0); // write
+        DriveRight.setPower(0); // write
     }
 }

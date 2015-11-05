@@ -1,17 +1,17 @@
 package au.org.teambacon.wrapper;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import au.org.teambacon.actions.ActionHandler;
 import au.org.teambacon.control.BMotor;
 import au.org.teambacon.control.BMotorController;
+import au.org.teambacon.control.BServo;
 
-public class BRobot extends LinearOpMode {
+public abstract class BRobot extends OpMode {
     public static BMotor DriveLeft;
     public static BMotor DriveRight;
     public static BMotorController DriveController;
@@ -22,11 +22,12 @@ public class BRobot extends LinearOpMode {
 
     protected int LoopCount = 0;
 
-    protected int State = 0;
-
     protected ElapsedTime Runtime = new ElapsedTime();
 
     private static boolean Flush = false;
+
+    protected Map<String, BMotor> Motors = new HashMap<String, BMotor>();
+    protected Map<String, BServo> Servos = new HashMap<String, BServo>();
 
     public BRobot() {
         Instance = this;
@@ -34,33 +35,33 @@ public class BRobot extends LinearOpMode {
         this.actionHandler = new ActionHandler(this);
     }
 
+    public void addMotor(BMotor motor, String name) {
+        this.Motors.put(name, motor);
+    }
+    public BMotor getMotor(String name) {
+        return this.Motors.get(name);
+    }
+    public void addServo(BServo servo, String name) {
+        this.Servos.put(name, servo);
+    }
+    public BServo getServo(String name) {
+        return this.Servos.get(name);
+    }
+
     public static void flush() {
         Flush = true;
     }
 
-    public final void runOpMode() throws InterruptedException {
-        linit();
-
-        waitForStart();
-
-        while (true)
-            lloop();
-    }
-
-    public final void linit() {
+    public final void init() {
         this.Runtime.reset();
+
         this.binit();
+
+        this.bdefineauto();
     }
 
-    public final void lloop() {
+    public final void loop() {
         this.LoopCount++;
-
-        telemetry.addData("State", Integer.toString(State));
-
-        if (this.LoopCount == 1) {
-            this.bdefineauto();
-            return; // flush everything
-        }
 
         if (Flush) {
             Flush = false;
@@ -73,14 +74,11 @@ public class BRobot extends LinearOpMode {
         this.bloop();
     }
 
-    public void bdefine() {
-    }
+    public abstract void bdefine();
 
-    public void binit() {
-    }
+    public abstract void binit();
 
-    public void bdefineauto() {
-    }
+    public abstract void bdefineauto();
 
     public final boolean bauto() {
         if (actionHandler.ActionList.isEmpty())
@@ -90,6 +88,5 @@ public class BRobot extends LinearOpMode {
         return true;
     }
 
-    public void bloop() {
-    }
+    public abstract void bloop();
 }

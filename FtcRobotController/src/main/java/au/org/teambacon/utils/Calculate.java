@@ -8,7 +8,7 @@ public class Calculate {
     }
 
     public static int degreesToTicks(double degrees) {
-        return (int) (BRobot.DriveLeft.getType().getEncoderPPR() / (degrees / 360));
+        return (int) (BRobot.DriveLeft.getType().getEncoderPPR() * (degrees / 360));
     }
 
     /*

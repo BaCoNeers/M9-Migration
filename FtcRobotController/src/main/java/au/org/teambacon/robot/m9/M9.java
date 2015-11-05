@@ -19,7 +19,6 @@ public abstract class M9 extends BRobot {
 
 
         super.DriveLeft = new BMotor("drive_left", super.DriveController, BMotor.BMotorType.TETRIX_ENCODER_LEGACY, DcMotor.Direction.FORWARD);
-<<<<<<< HEAD
         super.DriveRight = new BMotor("drive_right", super.DriveController, BMotor.BMotorType.TETRIX_ENCODER_LEGACY, DcMotor.Direction.REVERSE);
 
 
@@ -35,10 +34,5 @@ public abstract class M9 extends BRobot {
 
         super.addMotor(new BMotor("motor_lift2", motor_controller2, BMotor.BMotorType.LEGACY, DcMotor.Direction.REVERSE), "lift2");
         super.addMotor(new BMotor("motor_lift3", motor_controller2, BMotor.BMotorType.LEGACY, DcMotor.Direction.REVERSE), "lift3");
-=======
-        super.DriveRight = new BMotor("drive_right", super.DriveController, BMotor.BMotorType.TETRIX_ENCODER_LEGACY, DcMotor.Direction.FORWARD);
-
-        super.addMotor(new BMotor("motor_screwlift", new BMotorController("motorcontroller_1"), BMotor.BMotorType.LEGACY, DcMotor.Direction.FORWARD));
->>>>>>> origin/master
     }
 }

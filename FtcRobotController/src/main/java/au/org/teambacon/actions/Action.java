@@ -13,6 +13,8 @@ public abstract class Action {
 
     public abstract void init();
 
+    public abstract void prime();
+
     public abstract void start();
 
     public abstract boolean loop();

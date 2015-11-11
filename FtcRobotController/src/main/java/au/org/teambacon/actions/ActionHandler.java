@@ -24,18 +24,22 @@ public class ActionHandler {
                 this.Step++;
                 break;
             case 1:
-                this.ActionList.get(0).start();
+                this.ActionList.get(0).prime();
                 this.Step++;
                 break;
             case 2:
+                this.ActionList.get(0).start();
+                this.Step++;
+                break;
+            case 3:
                 if (this.ActionList.get(0).loop())
                     this.Step++;
                 break;
-            case 3:
+            case 4:
                 this.ActionList.get(0).end();
                 this.Step++;
                 break;
-            case 4:
+            case 5:
                 this.ActionList.remove(0);
                 this.Step = 0;
                 break;

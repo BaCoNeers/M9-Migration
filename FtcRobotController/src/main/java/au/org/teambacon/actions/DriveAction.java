@@ -2,6 +2,8 @@ package au.org.teambacon.actions;
 
 import com.qualcomm.robotcore.hardware.DcMotorController;
 
+import au.org.teambacon.wrapper.BRobot;
+
 public class DriveAction extends Action {
     protected double PowerLeft;
     protected double PowerRight;
@@ -14,8 +16,8 @@ public class DriveAction extends Action {
 
         super.register(this);
 
-        this.PowerLeft = power;
-        this.PowerRight = power;
+        this.PowerLeft = -power;
+        this.PowerRight = -power;
         this.TicksLeft = ticks;
         this.TicksRight = ticks;
     }
@@ -33,26 +35,44 @@ public class DriveAction extends Action {
     }
 
     public void init() {
-        DriveLeft.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out
-        DriveRight.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out
-
-
         DriveLeft.setTarget(this.TicksLeft); // no
         DriveRight.setTarget(this.TicksRight); // no
 
+        DriveLeft.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out
+        DriveRight.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out
+
         DriveLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS); // write
         DriveRight.setMode(DcMotorController.RunMode.RESET_ENCODERS); // write
+
+        BRobot.flush();
     }
 
-    public void start() {
-        DriveLeft.setPower(this.PowerLeft); // write
-        DriveRight.setPower(this.PowerRight); // write
+    public void prime() {
+        BRobot.flush();
 
         DriveLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS); // write
         DriveRight.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS); // write
+
+        DriveLeft.setPower(this.PowerLeft); // write
+        DriveRight.setPower(this.PowerRight); // write
+    }
+
+    public void start() {
+        BRobot.flush();
+
+        DriveLeft.getController().setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        DriveRight.getController().setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
     }
 
     public boolean loop() {
+        BRobot.Instance.telemetry.addData("Left", DriveLeft.getTarget());
+        BRobot.Instance.telemetry.addData("Left1", DriveLeft.getPower());
+        BRobot.Instance.telemetry.addData("Left2", DriveLeft.getPosition());
+        BRobot.Instance.telemetry.addData("Right", DriveRight.getTarget());
+        BRobot.Instance.telemetry.addData("Right1", DriveRight.getPower());
+        BRobot.Instance.telemetry.addData("Right2", DriveRight.getPosition());
+
+
         if (DriveLeft.getTarget() >= 0) { // no
             if (DriveLeft.getPosition() >= DriveLeft.getTarget() && DriveRight.getPosition() >= DriveRight.getPosition()) { // read
                 DriveLeft.getController().setDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY); // help out end()
@@ -71,7 +91,8 @@ public class DriveAction extends Action {
     }
 
     public void end() {
-        // stop motors
+        DriveLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        DriveRight.setMode(DcMotorController.RunMode.RESET_ENCODERS);
 
         DriveLeft.setPower(0); // write
         DriveRight.setPower(0); // write

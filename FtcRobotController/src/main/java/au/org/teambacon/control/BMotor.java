@@ -38,7 +38,7 @@ public class BMotor {
         /*if (this.Type.isLegacy())
             this.Controller.setDeviceMode(DcMotorController.DeviceMode.READ_ONLY);*/
 
-        return this.Motor.getCurrentPosition();
+        return (this.Motor.getDirection() == DcMotor.Direction.FORWARD) ? -this.Motor.getCurrentPosition() : this.Motor.getCurrentPosition();
     }
 
     public void setMode(DcMotorController.RunMode mode) {
@@ -56,15 +56,15 @@ public class BMotor {
     }
 
     public void setPower(double power) {
-        if (this.Type.isLegacy())
-            this.LegacyMotorPower = power;
+        /*if (this.Type.isLegacy())
+            this.LegacyMotorPower = power;*/
 
         this.Motor.setPower(power);
     }
 
     public double getPower() {
-        if (this.Type.isLegacy())
-            return this.LegacyMotorPower;
+        /*if (this.Type.isLegacy())
+            return this.LegacyMotorPower;*/
 
         return this.Motor.getPower();
     }
